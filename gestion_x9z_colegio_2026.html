@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - Gestión Escolar</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #e9f7ef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            border-top: 6px solid #28a745;
+        }
+
+        h2 {
+            text-align: center;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 25px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .link-home {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #28a745;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+    </style>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+</head>
+
+<body>
+
+    <script>
+        // 1. Definir la contraseña (Cámbiala por la que quieras)
+        var claveSecreta = "profe150819";
+
+        // 2. Preguntar la contraseña
+        var respuesta = prompt("🔒 Área Restringida: Ingrese la clave de acceso:");
+
+        // 3. Verificar
+        if (respuesta === claveSecreta) {
+            // Si es correcta, mostramos la página
+            document.body.style.display = "flex";
+        } else {
+            // Si es incorrecta, lo mandamos afuera
+            alert("⛔ Acceso Denegado");
+            window.location.href = "index.html"; // Lo devuelve al inicio
+        }
+    </script>
+
+    <div class="container">
+        <h2>👨‍🏫 Panel Administrativo</h2>
+        <p style="text-align: center; color: #666; font-size: 0.9rem;">Creación de cursos y Reportes</p>
+
+        <label>Nombre del Curso</label>
+        <input type="text" id="nombre" placeholder="Ej: Voleibol">
+
+        <label>Profesor Encargado</label>
+        <input type="text" id="profesor" placeholder="Ej: Carlos Ruiz">
+
+        <label>Sede</label>
+        <select id="sede">
+            <option value="Sede Central">Sede Central</option>
+            <option value="Sede Norte">Sede Norte</option>
+            <option value="Sede Sur">Sede Sur</option>
+        </select>
+
+        <label>Jornada</label>
+        <select id="jornada">
+            <option value="Mañana">Mañana</option>
+            <option value="Tarde">Tarde</option>
+        </select>
+
+        <button onclick="agregarCurso()">➕ Guardar Curso</button>
+
+        <hr style="margin: 30px 0; border: 0; border-top: 2px dashed #eee;">
+
+        <h3 style="text-align: center; color: #1a73e8; font-size: 1.1rem; margin-bottom: 5px;">📊 Reporte de Inscritos
+        </h3>
+        <p style="text-align: center; font-size: 0.8rem; color: #666; margin-top: 0;">Descarga la lista completa en
+            Excel</p>
+
+        <button onclick="descargarExcel()" style="background-color: #1a73e8; margin-top: 10px;">📥 Descargar Excel
+            (.xlsx)</button>
+
+        <a href="index.html" class="link-home">← Ir al formulario de estudiante</a>
+    </div>
+
+    <script>
+        // ⚠️ TUS CREDENCIALES
+        const firebaseConfig = {
+            apiKey: "AIzaSyDzrv7Cw66asz5zHGpCV83_raTWSNxlTj0",
+            authDomain: "cursosweb-accc1.firebaseapp.com",
+            projectId: "cursosweb-accc1",
+            storageBucket: "cursosweb-accc1.firebasestorage.app",
+            messagingSenderId: "690171584569",
+            appId: "1:690171584569:web:1fe927b437529dfa4f6de8"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // --- AGREGAR CURSO ---
+        function agregarCurso() {
+            const nombre = document.getElementById('nombre').value;
+            const profesor = document.getElementById('profesor').value;
+            const sede = document.getElementById('sede').value;
+            const jornada = document.getElementById('jornada').value;
+
+            if (!nombre || !profesor) {
+                alert("⚠️ Debes llenar nombre y profesor.");
+                return;
+            }
+
+            db.collection("cursos").add({
+                nombre: nombre,
+                profesor: profesor,
+                sede: sede,
+                jornada: jornada
+            }).then(() => {
+                alert("✅ Curso creado correctamente.");
+                document.getElementById('nombre').value = "";
+                document.getElementById('profesor').value = "";
+            }).catch((error) => alert("Error: " + error.message));
+        }
+
+        // --- DESCARGAR EXCEL (NUEVO) ---
+        async function descargarExcel() {
+            const btn = document.querySelector("button[onclick='descargarExcel()']");
+            const textoOriginal = btn.innerText;
+
+            try {
+                btn.innerText = "⏳ Generando archivo...";
+                btn.disabled = true;
+
+                const querySnapshot = await db.collection("inscripciones").orderBy("fecha", "desc").get();
+
+                if (querySnapshot.empty) {
+                    alert("⚠️ No hay estudiantes inscritos todavía.");
+                    return;
+                }
+
+                const datosParaExcel = [];
+
+                querySnapshot.forEach(doc => {
+                    const data = doc.data();
+
+                    // Formatear fecha
+                    let fechaLegible = "Sin fecha";
+                    if (data.fecha && data.fecha.toDate) {
+                        fechaLegible = data.fecha.toDate().toLocaleDateString("es-CO") + " " + data.fecha.toDate().toLocaleTimeString("es-CO");
+                    }
+
+                    datosParaExcel.push({
+                        "Cédula": data.cedula,
+                        "Nombres": data.nombres,
+                        "Apellidos": data.apellidos,
+                        "Grado": data.grado,
+                        "Sede": data.sede,
+                        "Jornada": data.jornada,
+                        "Curso": data.cursoNombre,
+                        "Fecha Registro": fechaLegible
+                    });
+                });
+
+                // Crear hoja y libro
+                const hoja = XLSX.utils.json_to_sheet(datosParaExcel);
+                const libro = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(libro, hoja, "Estudiantes");
+
+                // Descargar
+                XLSX.writeFile(libro, "Reporte_Estudiantes.xlsx");
+
+            } catch (error) {
+                console.error(error);
+                alert("Error: " + error.message);
+            } finally {
+                btn.innerText = textoOriginal;
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+
+</html>
