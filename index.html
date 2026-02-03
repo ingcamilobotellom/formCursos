@@ -1,39 +1,54 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Inscripción Escolar - Oficial</title>
     <style>
         /* --- ESTILOS GENERALES (BASE) --- */
-        body { 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            background-color: #f0f2f5; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-            padding: 20px; 
-            box-sizing: border-box; /* Para que el padding no desborde */
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            /* Para que el padding no desborde */
         }
 
-        .container { 
-            background: white; 
-            padding: 2.5rem; /* Padding grande para PC */
-            border-radius: 12px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
-            width: 100%; 
-            max-width: 450px; 
+        .container {
+            background: white;
+            padding: 2.5rem;
+            /* Padding grande para PC */
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            border-top: 6px solid #1a73e8;
         }
 
-        h2 { 
-            text-align: center; 
-            color: #1a73e8; 
-            margin-bottom: 15px; 
+        .logo-colegio {
+            display: block;
+            /* Para poder centrarlo */
+            margin: 0 auto 15px auto;
+            /* Centrado horizontal y margen abajo */
+            max-width: 120px;
+            /* TAMAÑO: Cambia este número si lo quieres más grande o chico */
+            height: auto;
+            /* Mantiene la proporción para que no se estire */
+        }
+
+        h2 {
+            text-align: center;
+            color: #1a73e8;
+            margin-bottom: 15px;
             font-size: 1.8rem;
         }
-        
+
         /* ESTILO DEL MENSAJE DE ALERTA */
         .alert-box {
             background-color: #fff3cd;
@@ -47,301 +62,338 @@
             text-align: justify;
         }
 
-        label { display: block; margin-top: 15px; font-weight: bold; color: #444; font-size: 0.95rem; }
-        
-        input, select { 
-            width: 100%; 
-            padding: 12px; 
-            margin-top: 5px; 
-            border: 1px solid #ccc; 
-            border-radius: 6px; 
-            box-sizing: border-box; 
-            font-size: 1rem; /* Importante para legibilidad */
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #444;
+            font-size: 0.95rem;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            /* Importante para legibilidad */
         }
 
         /* Campo de solo lectura (Profesor) */
-        input.readonly-field { 
-            background-color: #e9ecef; 
-            border-color: #ced4da; 
-            color: #495057; 
-            pointer-events: none; 
-            font-weight: bold; 
+        input.readonly-field {
+            background-color: #e9ecef;
+            border-color: #ced4da;
+            color: #495057;
+            pointer-events: none;
+            font-weight: bold;
         }
 
-        button { 
-            width: 100%; 
-            padding: 15px; 
-            margin-top: 25px; 
-            background-color: #1a73e8; 
-            color: white; 
-            border: none; 
-            border-radius: 6px; 
-            font-weight: bold; 
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 25px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
             font-size: 1.1rem;
-            cursor: pointer; 
-            transition: 0.3s; 
+            cursor: pointer;
+            transition: 0.3s;
             /* Sombra suave para que parezca botón táctil */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        
-        button:hover { background-color: #1557b0; }
-        button:disabled { background-color: #a0c1ed; cursor: not-allowed; }
-        
-        .loader { text-align: center; color: #666; font-size: 0.8rem; margin-top: 10px; display: none; font-style: italic; }
+
+        button:hover {
+            background-color: #1557b0;
+        }
+
+        button:disabled {
+            background-color: #a0c1ed;
+            cursor: not-allowed;
+        }
+
+        .loader {
+            text-align: center;
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            display: none;
+            font-style: italic;
+        }
 
         /* --- 📱 MEDIA QUERY (ESTILOS PARA CELULAR) --- */
         /* Se activa cuando la pantalla mide menos de 600px */
         @media (max-width: 600px) {
             body {
-                padding: 10px; /* Menos borde en el cuerpo */
-                align-items: flex-start; /* Ayuda al scroll en móviles pequeños */
+                padding: 10px;
+                /* Menos borde en el cuerpo */
+                align-items: flex-start;
+                /* Ayuda al scroll en móviles pequeños */
             }
 
             .container {
-                padding: 1.5rem; /* Reducimos el relleno interno */
+                padding: 1.5rem;
+                /* Reducimos el relleno interno */
                 border-radius: 8px;
+
             }
 
             h2 {
-                font-size: 1.5rem; /* Título un poco más pequeño */
+                font-size: 1.5rem;
+                /* Título un poco más pequeño */
                 margin-top: 0;
             }
 
             .alert-box {
-                font-size: 0.85rem; /* Texto de alerta más compacto */
+                font-size: 0.85rem;
+                /* Texto de alerta más compacto */
                 padding: 12px;
             }
 
-            input, select {
-                font-size: 16px; /* Evita que iPhone haga zoom al escribir */
-                padding: 14px; /* Área de toque más grande para el dedo */
+            input,
+            select {
+                font-size: 16px;
+                /* Evita que iPhone haga zoom al escribir */
+                padding: 14px;
+                /* Área de toque más grande para el dedo */
             }
 
             button {
-                padding: 16px; /* Botón más fácil de presionar */
+                padding: 16px;
+                /* Botón más fácil de presionar */
                 margin-top: 20px;
             }
         }
     </style>
-    
+
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
+
 <body>
 
-<div class="container">
-    <h2>📝 Inscripción de Cursos</h2>
+    <div class="container">
+        <img src="img/logo-colegio.png" alt="Logo del Colegio" class="logo-colegio">
+        <h2>Centros de Interés (2026)<br>
+            Colegio San Antonio - Villa del Rosario</h2>
 
-    <div class="alert-box">
-        <strong>⚠️ Aviso Importante:</strong><br>
-        Por favor verifica tus datos antes de enviar. El sistema permite <strong>una única inscripción por estudiante</strong>. Si intentas registrarte nuevamente con el mismo documento, el sistema rechazará tu solicitud.
+        <div class="alert-box">
+            Por favor verifica tus datos antes de enviar. El sistema permite <strong>una única inscripción por
+                estudiante</strong>. Si intentas registrarte nuevamente con el mismo documento, el sistema rechazará tu
+            solicitud. y tu dirección<strong> IP será bloqueada</strong>
+        </div>
+
+        <form id="registroForm">
+            <label>Documento de Identidad</label>
+            <input type="number" id="cedula" placeholder="Sin puntos ni comas" required>
+
+            <label>Nombres</label>
+            <input type="text" id="nombres" required>
+
+            <label>Apellidos</label>
+            <input type="text" id="apellidos" required>
+
+            <label>Grado</label>
+            <select id="grado" required>
+                <option value="">Seleccione...</option>
+                <option value="701">7-01</option>
+                <option value="702">7-02</option>
+                <option value="801">8-01</option>
+                <option value="802">8-02</option>
+                <option value="901">9-01</option>
+                <option value="902">9-02</option>
+                <option value="1001">10-01</option>
+                <option value="1002">10-02</option>
+                <option value="1101">11-01</option>
+                <option value="1102">11-02</option>
+            </select>
+
+            <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
+
+            <label>Sede</label>
+            <select id="sede" required>
+                <option value="">Seleccione Sede...</option>
+                <option value="Sede Central">Sede Central</option>
+            </select>
+
+            <label>Jornada</label>
+            <select id="jornada" required>
+                <option value="">Seleccione Jornada...</option>
+                <option value="Mañana">Mañana</option>
+            </select>
+
+            <label>Curso Disponible (Verificando Cupos)</label>
+            <div id="loader" class="loader">🔄 Consultando disponibilidad...</div>
+            <select id="cursos" disabled required>
+                <option value="">--- Seleccione primero Sede y Jornada ---</option>
+            </select>
+
+            <label>Profesor Encargado</label>
+            <input type="text" id="profesorDisplay" class="readonly-field" placeholder="Seleccione un curso..."
+                readonly>
+
+            <button type="submit" id="btnSubmit">Inscribirse</button>
+        </form>
     </div>
 
-    <form id="registroForm">
-        <label>Documento de Identidad</label>
-        <input type="number" id="cedula" placeholder="Sin puntos ni comas" required>
+    <script>
+        // ⚠️ TUS CREDENCIALES
+        const firebaseConfig = {
+            apiKey: "AIzaSyDzrv7Cw66asz5zHGpCV83_raTWSNxlTj0",
+            authDomain: "cursosweb-accc1.firebaseapp.com",
+            projectId: "cursosweb-accc1",
+            storageBucket: "cursosweb-accc1.firebasestorage.app",
+            messagingSenderId: "690171584569",
+            appId: "1:690171584569:web:1fe927b437529dfa4f6de8"
+        };
 
-        <label>Nombres</label>
-        <input type="text" id="nombres" required>
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-        <label>Apellidos</label>
-        <input type="text" id="apellidos" required>
+        const sedeInput = document.getElementById('sede');
+        const jornadaInput = document.getElementById('jornada');
+        const cursosSelect = document.getElementById('cursos');
+        const profesorDisplay = document.getElementById('profesorDisplay');
+        const loader = document.getElementById('loader');
+        const formulario = document.getElementById('registroForm');
+        const LIMITE_CUPOS = 20;
 
-        <label>Grado</label>
-        <select id="grado" required>
-            <option value="">Seleccione...</option>
-            <option value="701">7-01</option>
-            <option value="702">7-02</option>
-            <option value="801">8-01</option>
-            <option value="802">8-02</option>
-            <option value="901">9-01</option>
-            <option value="902">9-02</option>
-            <option value="1001">10-01</option>
-            <option value="1002">10-02</option>
-            <option value="1101">11-01</option>
-            <option value="1102">11-02</option>
-        </select>
+        // --- LÓGICA DE CARGA DE CURSOS ---
+        async function cargarCursos() {
+            const sede = sedeInput.value;
+            const jornada = jornadaInput.value;
+            profesorDisplay.value = "";
 
-        <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
+            if (sede && jornada) {
+                cursosSelect.innerHTML = ""; cursosSelect.disabled = true; loader.style.display = "block";
 
-        <label>Sede</label>
-        <select id="sede" required>
-            <option value="">Seleccione Sede...</option>
-            <option value="Sede Central">Sede Central</option>
-        </select>
+                try {
+                    const snapshot = await db.collection("cursos").where("sede", "==", sede).where("jornada", "==", jornada).get();
 
-        <label>Jornada</label>
-        <select id="jornada" required>
-            <option value="">Seleccione Jornada...</option>
-            <option value="Mañana">Mañana</option>
-        </select>
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = "";
 
-        <label>Curso Disponible (Verificando Cupos)</label>
-        <div id="loader" class="loader">🔄 Consultando disponibilidad...</div>
-        <select id="cursos" disabled required>
-            <option value="">--- Seleccione primero Sede y Jornada ---</option>
-        </select>
+                    if (snapshot.empty) {
+                        defaultOption.text = "No hay cursos disponibles";
+                        cursosSelect.appendChild(defaultOption);
+                    } else {
+                        defaultOption.text = "Seleccione un curso...";
+                        cursosSelect.appendChild(defaultOption);
+                        cursosSelect.disabled = false;
+                        cursosSelect.style.backgroundColor = "white";
+                    }
 
-        <label>Profesor Encargado</label>
-        <input type="text" id="profesorDisplay" class="readonly-field" placeholder="Seleccione un curso..." readonly>
+                    const promesasDeConteo = snapshot.docs.map(async (doc) => {
+                        const data = doc.data();
+                        const inscritosSnap = await db.collection("inscripciones").where("cursoId", "==", doc.id).get();
+                        const cuposOcupados = inscritosSnap.size;
+                        return {
+                            id: doc.id,
+                            nombre: data.nombre,
+                            profesor: data.profesor,
+                            disponibles: LIMITE_CUPOS - cuposOcupados
+                        };
+                    });
 
-        <button type="submit" id="btnSubmit">Inscribirse</button>
-    </form>
-</div>
+                    const cursosConCupos = await Promise.all(promesasDeConteo);
 
-<script>
-    // ⚠️ TUS CREDENCIALES
-    const firebaseConfig = {
-      apiKey: "AIzaSyDzrv7Cw66asz5zHGpCV83_raTWSNxlTj0",
-      authDomain: "cursosweb-accc1.firebaseapp.com",
-      projectId: "cursosweb-accc1",
-      storageBucket: "cursosweb-accc1.firebasestorage.app",
-      messagingSenderId: "690171584569",
-      appId: "1:690171584569:web:1fe927b437529dfa4f6de8"
-    };
+                    cursosConCupos.forEach(curso => {
+                        const opt = document.createElement('option');
+                        opt.value = curso.id;
+                        opt.setAttribute('data-profe', curso.profesor || "Sin asignar");
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+                        if (curso.disponibles > 0) {
+                            opt.text = `${curso.nombre} - (${curso.disponibles} Disp.) ✅`;
+                        } else {
+                            opt.text = `${curso.nombre} - (LLENO) ⛔`;
+                            opt.disabled = true;
+                            opt.style.color = "red";
+                        }
+                        cursosSelect.appendChild(opt);
+                    });
 
-    const sedeInput = document.getElementById('sede');
-    const jornadaInput = document.getElementById('jornada');
-    const cursosSelect = document.getElementById('cursos');
-    const profesorDisplay = document.getElementById('profesorDisplay');
-    const loader = document.getElementById('loader');
-    const formulario = document.getElementById('registroForm');
-    const LIMITE_CUPOS = 20;
+                } catch (error) {
+                    console.error("Error:", error);
+                } finally {
+                    loader.style.display = "none";
+                }
+            } else {
+                cursosSelect.innerHTML = '<option>--- Seleccione Sede y Jornada ---</option>';
+                cursosSelect.disabled = true;
+            }
+        }
 
-    // --- LÓGICA DE CARGA DE CURSOS ---
-    async function cargarCursos() {
-        const sede = sedeInput.value;
-        const jornada = jornadaInput.value;
-        profesorDisplay.value = ""; 
+        sedeInput.addEventListener('change', cargarCursos);
+        jornadaInput.addEventListener('change', cargarCursos);
 
-        if (sede && jornada) {
-            cursosSelect.innerHTML = ""; cursosSelect.disabled = true; loader.style.display = "block";
+        cursosSelect.addEventListener('change', function () {
+            const opcionSeleccionada = this.options[this.selectedIndex];
+            const nombreProfe = opcionSeleccionada.getAttribute('data-profe');
+            profesorDisplay.value = nombreProfe ? nombreProfe : "";
+        });
+
+        // --- LÓGICA DE ENVÍO CON VALIDACIONES ---
+        formulario.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            const cedulaIngresada = document.getElementById('cedula').value.trim();
+            const cursoId = cursosSelect.value;
+
+            if (!cursoId) { alert("Seleccione un curso válido"); return; }
+
+            btn.disabled = true; btn.innerText = "Verificando...";
 
             try {
-                const snapshot = await db.collection("cursos").where("sede", "==", sede).where("jornada", "==", jornada).get();
+                // 1. Validar duplicados
+                const estudianteSnapshot = await db.collection("inscripciones")
+                    .where("cedula", "==", cedulaIngresada)
+                    .get();
 
-                const defaultOption = document.createElement('option');
-                defaultOption.value = "";
-                
-                if (snapshot.empty) {
-                    defaultOption.text = "No hay cursos disponibles";
-                    cursosSelect.appendChild(defaultOption);
-                } else {
-                    defaultOption.text = "Seleccione un curso...";
-                    cursosSelect.appendChild(defaultOption);
-                    cursosSelect.disabled = false;
-                    cursosSelect.style.backgroundColor = "white";
+                if (!estudianteSnapshot.empty) {
+                    alert("⛔ ERROR: El documento " + cedulaIngresada + " ya está registrado en el sistema. No se permite doble inscripción.");
+                    btn.disabled = false; btn.innerText = "Inscribirse";
+                    return;
                 }
 
-                const promesasDeConteo = snapshot.docs.map(async (doc) => {
-                    const data = doc.data();
-                    const inscritosSnap = await db.collection("inscripciones").where("cursoId", "==", doc.id).get();
-                    const cuposOcupados = inscritosSnap.size;
-                    return {
-                        id: doc.id,
-                        nombre: data.nombre,
-                        profesor: data.profesor,
-                        disponibles: LIMITE_CUPOS - cuposOcupados
-                    };
+                // 2. Validar cupos
+                const cursoSnapshot = await db.collection("inscripciones").where("cursoId", "==", cursoId).get();
+                if (cursoSnapshot.size >= LIMITE_CUPOS) {
+                    alert("⛔ ¡El curso se llenó justo ahora! Intenta con otro.");
+                    cargarCursos();
+                    return;
+                }
+
+                // 3. Guardar
+                await db.collection("inscripciones").add({
+                    cedula: cedulaIngresada,
+                    nombres: document.getElementById('nombres').value,
+                    apellidos: document.getElementById('apellidos').value,
+                    grado: document.getElementById('grado').value,
+                    sede: sedeInput.value,
+                    jornada: jornadaInput.value,
+                    cursoId: cursoId,
+                    cursoNombre: cursosSelect.options[cursosSelect.selectedIndex].text.split(" -")[0],
+                    fecha: new Date()
                 });
 
-                const cursosConCupos = await Promise.all(promesasDeConteo);
-
-                cursosConCupos.forEach(curso => {
-                    const opt = document.createElement('option');
-                    opt.value = curso.id;
-                    opt.setAttribute('data-profe', curso.profesor || "Sin asignar");
-
-                    if (curso.disponibles > 0) {
-                        opt.text = `${curso.nombre} - (${curso.disponibles} Disp.) ✅`;
-                    } else {
-                        opt.text = `${curso.nombre} - (LLENO) ⛔`;
-                        opt.disabled = true;
-                        opt.style.color = "red";
-                    }
-                    cursosSelect.appendChild(opt);
-                });
+                alert("✅ ¡Inscripción Exitosa! Bienvenido.");
+                formulario.reset();
+                profesorDisplay.value = "";
+                cursosSelect.innerHTML = '<option>--- Seleccione Sede y Jornada ---</option>';
+                cursosSelect.disabled = true;
 
             } catch (error) {
-                console.error("Error:", error);
+                console.error(error);
+                alert("Error: " + error.message);
             } finally {
-                loader.style.display = "none";
-            }
-        } else {
-            cursosSelect.innerHTML = '<option>--- Seleccione Sede y Jornada ---</option>';
-            cursosSelect.disabled = true;
-        }
-    }
-
-    sedeInput.addEventListener('change', cargarCursos);
-    jornadaInput.addEventListener('change', cargarCursos);
-    
-    cursosSelect.addEventListener('change', function() {
-        const opcionSeleccionada = this.options[this.selectedIndex];
-        const nombreProfe = opcionSeleccionada.getAttribute('data-profe');
-        profesorDisplay.value = nombreProfe ? nombreProfe : "";
-    });
-
-    // --- LÓGICA DE ENVÍO CON VALIDACIONES ---
-    formulario.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('btnSubmit');
-        const cedulaIngresada = document.getElementById('cedula').value.trim();
-        const cursoId = cursosSelect.value;
-        
-        if (!cursoId) { alert("Seleccione un curso válido"); return; }
-        
-        btn.disabled = true; btn.innerText = "Verificando...";
-
-        try {
-            // 1. Validar duplicados
-            const estudianteSnapshot = await db.collection("inscripciones")
-                                               .where("cedula", "==", cedulaIngresada)
-                                               .get();
-
-            if (!estudianteSnapshot.empty) {
-                alert("⛔ ERROR: El documento " + cedulaIngresada + " ya está registrado en el sistema. No se permite doble inscripción.");
                 btn.disabled = false; btn.innerText = "Inscribirse";
-                return;
             }
-
-            // 2. Validar cupos
-            const cursoSnapshot = await db.collection("inscripciones").where("cursoId", "==", cursoId).get();
-            if (cursoSnapshot.size >= LIMITE_CUPOS) {
-                alert("⛔ ¡El curso se llenó justo ahora! Intenta con otro.");
-                cargarCursos();
-                return;
-            }
-
-            // 3. Guardar
-            await db.collection("inscripciones").add({
-                cedula: cedulaIngresada,
-                nombres: document.getElementById('nombres').value,
-                apellidos: document.getElementById('apellidos').value,
-                grado: document.getElementById('grado').value,
-                sede: sedeInput.value,
-                jornada: jornadaInput.value,
-                cursoId: cursoId,
-                cursoNombre: cursosSelect.options[cursosSelect.selectedIndex].text.split(" -")[0],
-                fecha: new Date()
-            });
-
-            alert("✅ ¡Inscripción Exitosa! Bienvenido.");
-            formulario.reset();
-            profesorDisplay.value = "";
-            cursosSelect.innerHTML = '<option>--- Seleccione Sede y Jornada ---</option>';
-            cursosSelect.disabled = true;
-
-        } catch (error) {
-            console.error(error);
-            alert("Error: " + error.message);
-        } finally {
-            btn.disabled = false; btn.innerText = "Inscribirse";
-        }
-    });
-</script>
+        });
+    </script>
 </body>
+
 </html>
