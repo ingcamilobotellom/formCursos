@@ -136,7 +136,7 @@
             Excel</p>
 
         <button onclick="descargarExcel()" style="background-color: #1a73e8; margin-top: 10px;">📥 Descargar Excel
-            (.xlsx)</button>
+            con Profesores (.xlsx)</button>
 
         <a href="index.html" class="link-home">← Ir al formulario de estudiante</a>
     </div>
@@ -179,15 +179,26 @@
             }).catch((error) => alert("Error: " + error.message));
         }
 
-        // --- DESCARGAR EXCEL (NUEVO) ---
+        // --- DESCARGAR EXCEL MEJORADO (CON PROFESOR) ---
         async function descargarExcel() {
             const btn = document.querySelector("button[onclick='descargarExcel()']");
             const textoOriginal = btn.innerText;
 
             try {
-                btn.innerText = "⏳ Generando archivo...";
+                btn.innerText = "⏳ Consultando cursos...";
                 btn.disabled = true;
 
+                // PASO 1: Traer los cursos para saber quién es el profesor de cada ID
+                const mapaProfesores = {};
+                const cursosSnapshot = await db.collection("cursos").get();
+
+                cursosSnapshot.forEach(doc => {
+                    const data = doc.data();
+                    // Guardamos en un diccionario: ID_CURSO -> NOMBRE_PROFESOR
+                    mapaProfesores[doc.id] = data.profesor || "Sin asignar";
+                });
+
+                // PASO 2: Traer inscripciones
                 const querySnapshot = await db.collection("inscripciones").orderBy("fecha", "desc").get();
 
                 if (querySnapshot.empty) {
@@ -197,6 +208,7 @@
 
                 const datosParaExcel = [];
 
+                // PASO 3: Cruzar la información
                 querySnapshot.forEach(doc => {
                     const data = doc.data();
 
@@ -206,6 +218,9 @@
                         fechaLegible = data.fecha.toDate().toLocaleDateString("es-CO") + " " + data.fecha.toDate().toLocaleTimeString("es-CO");
                     }
 
+                    // BUSCAR EL PROFESOR USANDO EL ID DEL CURSO (DATA.CURSOID)
+                    const nombreProfesor = mapaProfesores[data.cursoId] || "Curso no encontrado";
+
                     datosParaExcel.push({
                         "Cédula": data.cedula,
                         "Nombres": data.nombres,
@@ -214,6 +229,7 @@
                         "Sede": data.sede,
                         "Jornada": data.jornada,
                         "Curso": data.cursoNombre,
+                        "Profesor": nombreProfesor, // <--- CAMPO NUEVO
                         "Fecha Registro": fechaLegible
                     });
                 });
@@ -224,7 +240,8 @@
                 XLSX.utils.book_append_sheet(libro, hoja, "Estudiantes");
 
                 // Descargar
-                XLSX.writeFile(libro, "Reporte_Estudiantes.xlsx");
+                XLSX.writeFile(libro, "Reporte_Completo_Profesores.xlsx");
+                alert("✅ ¡Reporte descargado con éxito!");
 
             } catch (error) {
                 console.error(error);
